@@ -1,7 +1,8 @@
 import socket
 from typing import Dict, Any, Union, List
+from lib.app import routes
 
-from views.view import routes
+import views.view
 
 
 def dispatch(request):

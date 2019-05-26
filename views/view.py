@@ -2,8 +2,11 @@ from typing import List, Tuple, Any
 from mimetypes import guess_type
 import os
 
+from lib.app import route
 
-def index(request: dict) -> Tuple[str, List[tuple], bytes]:
+
+@route('/hello')
+def hello(request: dict) -> Tuple[str, List[tuple], bytes]:
     body = b'''
     <html><body>
         <h1>hello, world.</h1>
@@ -12,6 +15,7 @@ def index(request: dict) -> Tuple[str, List[tuple], bytes]:
     return '200 OK', [], body
 
 
+@route('/static/')
 def file_view(request: dict) -> Tuple[str, list, bytes]:
     path: str = request['PATH_INFO'].lstrip('/')
     if not os.path.isfile(path):
@@ -25,12 +29,6 @@ def file_view(request: dict) -> Tuple[str, list, bytes]:
     return '200 OK', headers, open(path, 'rb').read()
 
 
+@route('/')
 def not_found_view(request: dict) -> Tuple[str, List[tuple], bytes]:
     return '404 Not Found', [], b'404 not found'
-
-
-routes = {
-    '/static/': file_view,
-    '/hello': index,
-    '/': not_found_view
-}
